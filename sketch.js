@@ -10,11 +10,16 @@ const lipsIndices = [61, 146, 91, 181, 84, 17, 314, 405, 321, 375, 291, 61];
 
 function setup() {
   createCanvas(640, 480);
+
+  // 初始化攝影機
   video = createCapture(VIDEO, () => {
     console.log("Camera initialized successfully!");
   });
   video.size(width, height);
   video.hide();
+
+  // 確認 ml5 是否正確載入
+  console.log("ml5 version:", ml5.version);
 
   // 初始化 FaceMesh 模型
   facemesh = ml5.facemesh(video, () => {
