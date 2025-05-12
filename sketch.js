@@ -1,0 +1,51 @@
+let facemesh;
+let video;
+let predictions = [];
+
+// 定義要串接的特徵點編號
+const pointIndices = [409, 270, 269, 267, 0, 37, 39, 40, 185, 61, 146, 91, 181, 84, 17, 314, 405, 321, 375, 291];
+
+function setup() {
+  createCanvas(640, 480);
+  video = createCapture(VIDEO);
+  video.size(width, height);
+  video.hide();
+
+  // 初始化 FaceMesh 模型
+  facemesh = ml5.facemesh(video, modelReady);
+
+  // 當模型偵測到臉部特徵時，更新 predictions
+  facemesh.on("predict", (results) => {
+    predictions = results;
+  });
+}
+
+function modelReady() {
+  console.log("FaceMesh model ready!");
+}
+
+function draw() {
+  image(video, 0, 0, width, height);
+
+  // 繪製紅色線條
+  drawLines();
+}
+
+function drawLines() {
+  if (predictions.length > 0) {
+    const keypoints = predictions[0].scaledMesh;
+
+    stroke(255, 0, 0); // 設定線條顏色為紅色
+    strokeWeight(5); // 設定線條粗細為 5
+    noFill();
+
+    // 繪製線條，將指定的點串接起來
+    beginShape();
+    for (let i = 0; i < pointIndices.length; i++) {
+      const index = pointIndices[i];
+      const [x, y] = keypoints[index];
+      vertex(x, y);
+    }
+    endShape(CLOSE); // 將最後一點與第一點連接
+  }
+}
