@@ -7,25 +7,20 @@ const pointIndices = [409, 270, 269, 267, 0, 37, 39, 40, 185, 61, 146, 91, 181, 
 
 function setup() {
   createCanvas(640, 480);
-  video = createCapture(VIDEO);
+  video = createCapture(VIDEO, () => {
+    console.log("Camera initialized successfully!");
+  });
   video.size(width, height);
   video.hide();
-
-  // 初始化 FaceMesh 模型
-  facemesh = ml5.facemesh(video, modelReady);
-
-  // 當模型偵測到臉部特徵時，更新 predictions
-  facemesh.on("predict", (results) => {
-    predictions = results;
-  });
-}
-
-function modelReady() {
-  console.log("FaceMesh model ready!");
 }
 
 function draw() {
-  image(video, 0, 0, width, height);
+  if (video.loadedmetadata) {
+    image(video, 0, 0, width, height);
+  } else {
+    console.log("Waiting for video to load...");
+    background(0); // 顯示黑色背景，表示尚未載入
+  }
 
   // 繪製紅色線條
   drawLines();
