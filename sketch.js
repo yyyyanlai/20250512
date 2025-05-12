@@ -5,6 +5,8 @@ let predictions = [];
 // 定義要串接的特徵點編號（臉部輪廓）
 const faceOutlineIndices = [409, 270, 269, 267, 0, 37, 39, 40, 185, 61, 146, 91, 181, 84, 17, 314, 405, 321, 375, 291];
 
+// 定義嘴唇的特徵點編號
+const lipsIndices = [61, 146, 91, 181, 84, 17, 314, 405, 321, 375, 291, 61];
 
 function setup() {
   createCanvas(640, 480);
@@ -35,8 +37,9 @@ function draw() {
   translate(width, 0);
   scale(-1, 1);
 
+  // 顯示攝影機畫面
   if (video.loadedmetadata) {
-    image(video, 0, 0, width, height); // 顯示攝影機畫面
+    image(video, 0, 0, width, height);
   } else {
     console.log("Waiting for video to load...");
     background(0); // 顯示黑色背景，表示尚未載入
