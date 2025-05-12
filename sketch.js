@@ -18,12 +18,12 @@ function setup() {
 }
 
 function draw() {
-  // 水平翻轉畫布
+  // 水平翻轉畫布，實現鏡像效果
   translate(width, 0);
   scale(-1, 1);
 
   if (video.loadedmetadata) {
-    image(video, 0, 0, width, height);
+    image(video, 0, 0, width, height); // 顯示攝影機畫面
   } else {
     console.log("Waiting for video to load...");
     background(0); // 顯示黑色背景，表示尚未載入
