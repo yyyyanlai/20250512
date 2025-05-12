@@ -15,6 +15,16 @@ function setup() {
   });
   video.size(width, height);
   video.hide();
+
+  // 初始化 FaceMesh 模型
+  facemesh = ml5.facemesh(video, () => {
+    console.log("FaceMesh model loaded!");
+  });
+
+  // 當模型偵測到臉部特徵時，更新 predictions
+  facemesh.on("predict", (results) => {
+    predictions = results;
+  });
 }
 
 function draw() {
@@ -30,8 +40,12 @@ function draw() {
   }
 
   // 繪製臉部輪廓和嘴唇
-  drawLines(faceOutlineIndices, color(255, 0, 0)); // 臉部輪廓為紅色
-  drawLines(lipsIndices, color(0, 0, 255)); // 嘴唇為藍色
+  if (predictions.length > 0) {
+    drawLines(faceOutlineIndices, color(255, 0, 0)); // 臉部輪廓為紅色
+    drawLines(lipsIndices, color(0, 0, 255)); // 嘴唇為藍色
+  } else {
+    console.log("No predictions available yet.");
+  }
 }
 
 function drawLines(indices, lineColor) {
